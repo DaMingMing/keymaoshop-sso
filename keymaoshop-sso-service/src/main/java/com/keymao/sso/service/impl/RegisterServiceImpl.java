@@ -5,9 +5,12 @@ import com.keymao.mapper.TbUserMapper;
 import com.keymao.pojo.TbUser;
 import com.keymao.pojo.TbUserExample;
 import com.keymaoshop.sso.service.RegisterService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -43,6 +46,42 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public E3Result register(TbUser user) {
-        return null;
+        // 1、使用TbUser接收提交的请求。
+        if (StringUtils.isBlank(user.getUsername())) {
+            return E3Result.build(400, "用户名不能为空");
+        }
+        if (StringUtils.isBlank(user.getPassword())) {
+            return E3Result.build(400, "密码不能为空");
+        }
+        //校验数据是否可用
+        E3Result result = checkData(user.getUsername(), 1);
+        if (!(boolean) result.getData()) {
+            return E3Result.build(400, "此用户名已经被使用");
+        }
+        //校验电话是否可以
+        if (StringUtils.isNotBlank(user.getPhone())) {
+            result = checkData(user.getPhone(), 2);
+            if (!(boolean) result.getData()) {
+                return E3Result.build(400, "此手机号已经被使用");
+            }
+        }
+        //校验email是否可用
+        if (StringUtils.isNotBlank(user.getEmail())) {
+            result = checkData(user.getEmail(), 3);
+            if (!(boolean) result.getData()) {
+                return E3Result.build(400, "此邮件地址已经被使用");
+            }
+        }
+        // 2、补全TbUser其他属性。
+        user.setCreated(new Date());
+        user.setUpdated(new Date());
+        // 3、密码要进行MD5加密。
+        String md5Pass = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
+        user.setPassword(md5Pass);
+        // 4、把用户信息插入到数据库中。
+        userMapper.insert(user);
+        // 5、返回e3Result。
+        return E3Result.ok();
+
     }
 }
