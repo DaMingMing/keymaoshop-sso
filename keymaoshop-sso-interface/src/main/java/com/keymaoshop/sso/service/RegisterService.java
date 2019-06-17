@@ -9,7 +9,7 @@ public interface RegisterService {
      * 注册校验
      * @param param 要校验的数据
      * @param type 校验的数据类型，1-用户名；2-手机号
-     * @return
+     * @return  如果没有数据返回true，否则返回false
      */
     E3Result checkData(String param, int type);
 
