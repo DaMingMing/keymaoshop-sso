@@ -31,7 +31,7 @@ public class TokenServiceImpl implements TokenService {
 		if (StringUtils.isBlank(json)) {
 			return E3Result.build(201, "用户登录已经过期");
 		}
-		//取到用户信息更新token的过期时间
+		//取到用户信息更新token的过期时间，每次请求都更新时间
 		jedisClient.expire("SESSION:" + token, SESSION_EXPIRE);
 		//返回结果，E3Result其中包含TbUser对象
 		TbUser user = JsonUtils.jsonToPojo(json, TbUser.class);
