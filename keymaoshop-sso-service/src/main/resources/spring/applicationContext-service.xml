@@ -24,4 +24,6 @@
 	<!-- 声明需要暴露的服务接口 timeout超时时间，单位为毫秒--><!-- timeout="100000"-->
 	<dubbo:service interface="com.keymaoshop.sso.service.RegisterService" ref="registerServiceImpl" timeout="100000" retries="5"/>
 	<dubbo:service interface="com.keymaoshop.sso.service.LoginService" ref="loginServiceImpl"  timeout="100000" retries="5"/>
+	<dubbo:service interface="com.keymaoshop.sso.service.TokenService" ref="tokenServiceImpl"  timeout="100000" retries="5"/>
+
 </beans>
