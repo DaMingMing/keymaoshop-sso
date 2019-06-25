@@ -60,4 +60,11 @@ public class LoginServiceImpl implements LoginService {
 
         return E3Result.ok(token);
     }
+
+    @Override
+    public E3Result userLogout(String token) {
+        //删除登录信息
+        jedisClient.del("SESSION:" + token);
+        return E3Result.ok(token);
+    }
 }

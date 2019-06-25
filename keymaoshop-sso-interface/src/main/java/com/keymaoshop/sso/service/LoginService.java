@@ -15,4 +15,11 @@ public interface LoginService {
      */
     //返回值：E3Result，其中包含token信息
     E3Result userLogin(String username,String password);
+
+    /**
+     * 根据key删除redis登录信息
+     * @param token
+     * @return
+     */
+    E3Result userLogout(String token);
 }
